@@ -162,9 +162,9 @@ export default function UniversitySearchPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+      <header className="bg-white border-b shadow-sm">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">University Search</h1>
               <p className="text-gray-600">Discover and explore universities that fit you</p>
@@ -176,17 +176,17 @@ export default function UniversitySearchPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Search and Filters */}
         <div className="mb-8 space-y-4">
           <div className="flex gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <div className="relative flex-1">
+              <Search className="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 left-4 top-1/2" />
               <Input
                 placeholder="Search university name, city, or state..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-12 h-12 text-base"
+                className="h-12 pl-12 text-base"
               />
             </div>
             <Button
@@ -194,7 +194,7 @@ export default function UniversitySearchPage() {
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center"
             >
-              <Filter className="h-4 w-4 mr-2" />
+              <Filter className="w-4 h-4 mr-2" />
               Filters
             </Button>
           </div>
@@ -205,9 +205,9 @@ export default function UniversitySearchPage() {
                 <CardTitle>Filter Options</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">State</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">State</label>
                     <Select
                       value={filters.state}
                       onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
@@ -220,7 +220,7 @@ export default function UniversitySearchPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                       Max Ranking: {filters.rankingMax}
                     </label>
                     <input
@@ -234,7 +234,7 @@ export default function UniversitySearchPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                       Min Acceptance Rate: {filters.acceptanceRateMin}%
                     </label>
                     <input
@@ -248,7 +248,7 @@ export default function UniversitySearchPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                       Max Tuition: {formatCurrency(filters.tuitionMax)}
                     </label>
                     <input
@@ -263,9 +263,9 @@ export default function UniversitySearchPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">Application System</label>
+                    <label className="block mb-2 text-sm font-medium text-gray-700">Application System</label>
                     <select
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      className="w-full px-3 py-2 text-sm border rounded-md border-input bg-background"
                       value={filters.applicationSystem}
                       onChange={(e) => setFilters(prev => ({ ...prev, applicationSystem: e.target.value }))}
                     >
@@ -277,7 +277,7 @@ export default function UniversitySearchPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex justify-end space-x-2">
+                <div className="flex justify-end mt-4 space-x-2">
                   <Button
                     variant="outline"
                     onClick={() => setFilters({
@@ -300,15 +300,15 @@ export default function UniversitySearchPage() {
         </div>
 
         {/* University Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredUniversities.map((university) => (
-            <Card key={university.id} className="hover:shadow-lg transition-shadow">
+            <Card key={university.id} className="transition-shadow hover:shadow-lg">
               <CardHeader>
-                <div className="flex justify-between items-start">
+                <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <CardTitle className="text-lg">{university.name}</CardTitle>
                     <CardDescription className="flex items-center mt-1">
-                      <MapPin className="h-4 w-4 mr-1" />
+                      <MapPin className="w-4 h-4 mr-1" />
                       {university.city}, {university.state}
                     </CardDescription>
                   </div>
@@ -333,25 +333,25 @@ export default function UniversitySearchPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-1 text-green-600" />
+                    <TrendingUp className="w-4 h-4 mr-1 text-green-600" />
                     <span>Acceptance Rate: {university.acceptance_rate}%</span>
                   </div>
                   <div className="flex items-center">
-                    <DollarSign className="h-4 w-4 mr-1 text-blue-600" />
+                    <DollarSign className="w-4 h-4 mr-1 text-blue-600" />
                     <span>{formatCurrency(university.tuition_out_state)}</span>
                   </div>
                   <div className="flex items-center">
-                    <Users className="h-4 w-4 mr-1 text-purple-600" />
+                    <Users className="w-4 h-4 mr-1 text-purple-600" />
                     <span>Student-Faculty Ratio: {university.student_faculty_ratio}</span>
                   </div>
                   <div className="flex items-center">
-                    <Star className="h-4 w-4 mr-1 text-orange-600" />
+                    <Star className="w-4 h-4 mr-1 text-orange-600" />
                     <span>{university.application_system}</span>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Popular Majors:</p>
+                  <p className="mb-2 text-sm font-medium text-gray-700">Popular Majors:</p>
                   <div className="flex flex-wrap gap-1">
                     {university.popular_majors.slice(0, 3).map((major) => (
                       <Badge key={major} variant="secondary" className="text-xs">
@@ -366,8 +366,8 @@ export default function UniversitySearchPage() {
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  <p className="text-sm text-gray-600 mb-2">Application Deadlines:</p>
+                <div className="pt-4 border-t">
+                  <p className="mb-2 text-sm text-gray-600">Application Deadlines:</p>
                   <div className="space-y-1 text-xs">
                     {university.deadlines.early_action && (
                       <div>Early Action: {university.deadlines.early_action}</div>
@@ -378,17 +378,17 @@ export default function UniversitySearchPage() {
                   </div>
                 </div>
 
-                <div className="flex space-x-2 pt-2">
+                <div className="flex pt-2 space-x-2">
                   <Button
                     size="sm"
                     onClick={() => addToApplications(university)}
                     className="flex-1"
                   >
-                    <Plus className="h-4 w-4 mr-1" />
+                    <Plus className="w-4 h-4 mr-1" />
                     Add Application
                   </Button>
                   <Button variant="outline" size="sm">
-                    <ExternalLink className="h-4 w-4 mr-1" />
+                    <ExternalLink className="w-4 h-4 mr-1" />
                     Details
                   </Button>
                 </div>
@@ -398,9 +398,9 @@ export default function UniversitySearchPage() {
         </div>
 
         {filteredUniversities.length === 0 && (
-          <div className="text-center py-12">
-            <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No matching universities found</h3>
+          <div className="py-12 text-center">
+            <Search className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+            <h3 className="mb-2 text-lg font-semibold text-gray-900">No matching universities found</h3>
             <p className="text-gray-600">Try adjusting your search terms or filters</p>
           </div>
         )}

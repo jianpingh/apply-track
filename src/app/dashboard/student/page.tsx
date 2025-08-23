@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import { 
   Calendar, 
   Clock, 
@@ -18,7 +20,8 @@ import {
   Target,
   Bell,
   LogOut,
-  User
+  User,
+  Search
 } from 'lucide-react'
 import { formatDate, getDaysUntilDeadline, getDeadlineStatus, getStatusColor } from '@/lib/utils'
 import { useAuth } from '@/contexts/AuthContext'
@@ -149,11 +152,6 @@ export default function StudentDashboard() {
                   )}
                 </Button>
               </div>
-              
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Application
-              </Button>
             </div>
           </div>
         </div>
@@ -162,6 +160,21 @@ export default function StudentDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Add Application Card - Featured Position */}
+          <Card className="border-2 border-dashed border-blue-300 bg-gradient-to-br from-blue-50 to-indigo-50 hover:border-blue-400 transition-all duration-200 cursor-pointer group"
+                onClick={() => router.push('/dashboard/student/add-application')}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-blue-700">Add New Application</CardTitle>
+              <Plus className="h-5 w-5 text-blue-600 group-hover:scale-110 transition-transform" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-bold text-blue-800 mb-1">Start Applying</div>
+              <p className="text-xs text-blue-600">
+                Search universities and begin your application journey
+              </p>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
