@@ -47,6 +47,7 @@
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.3.3",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
@@ -59,7 +60,6 @@
     "eslint-config-next": "14.2.8",
     "postcss": "^8.5.6",
     "supabase": "^1.191.3",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "tailwindcss": "^3.4.1"
   }
 }
