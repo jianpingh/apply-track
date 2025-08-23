@@ -1,45 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { email, password, userData } = body
+    const { email, password, userData } = await request.json()
 
-    console.log('Testing signup with:', { email, userData })
+    // Check if user already exists
+    const { data: existingUser, error: checkError } = await supabase.auth.getUser()
+    
+    if (existingUser) {
+      return NextResponse.json({ 
+        error: 'User already exists' 
+      }, { status: 400 })
+    }
 
-    // Step 1: Create user with Supabase Auth
+    // Create user account
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: userData.full_name,
-          role: userData.role
+          role: userData.role,
         }
       }
     })
 
     if (authError) {
-      console.error('Auth error:', authError)
       return NextResponse.json({ 
-        success: false, 
-        error: authError.message,
-        step: 'authentication'
+        error: authError.message 
       }, { status: 400 })
     }
 
     if (!authData.user) {
       return NextResponse.json({ 
-        success: false, 
-        error: 'No user created',
-        step: 'authentication'
-      }, { status: 400 })
+        error: 'Failed to create user' 
+      }, { status: 500 })
     }
 
-    console.log('User created:', authData.user.id)
-
-    // Step 2: Create profile record
+    // Create profile record
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .insert({
@@ -48,60 +52,77 @@ export async function POST(request: NextRequest) {
         full_name: userData.full_name,
         role: userData.role,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single()
 
     if (profileError) {
-      console.error('Profile error:', profileError)
       return NextResponse.json({ 
-        success: false, 
-        error: profileError.message,
-        step: 'profile_creation',
-        userId: authData.user.id
-      }, { status: 400 })
+        error: 'Failed to create profile: ' + profileError.message 
+      }, { status: 500 })
     }
 
-    console.log('Profile created:', profileData)
-
-    // Step 3: Create role-specific record
-    if (userData.role === 'student' && userData.graduation_year) {
+    // Create additional records based on role
+    if (userData.role === 'student' && userData.studentData) {
       const { error: studentError } = await supabase
         .from('students')
         .insert({
           id: authData.user.id,
-          graduation_year: parseInt(userData.graduation_year),
-          target_countries: [],
-          intended_majors: [],
+          graduation_year: userData.studentData.graduation_year,
+          gpa: userData.studentData.gpa,
+          sat_score: userData.studentData.sat_score,
+          act_score: userData.studentData.act_score,
+          target_countries: userData.studentData.target_countries || ['United States'],
+          intended_majors: userData.studentData.intended_majors || [],
+          high_school: userData.studentData.high_school,
+          counselor_name: userData.studentData.counselor_name,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
 
       if (studentError) {
-        console.error('Student record error:', studentError)
         return NextResponse.json({ 
-          success: false, 
-          error: studentError.message,
-          step: 'student_record_creation',
-          profile: profileData
-        }, { status: 400 })
+          error: 'Failed to create student record: ' + studentError.message 
+        }, { status: 500 })
       }
     }
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'User, profile, and role-specific records created successfully',
-      user: authData.user,
+    if (userData.role === 'parent' && userData.parentData) {
+      const { error: parentError } = await supabase
+        .from('parents')
+        .insert({
+          id: authData.user.id,
+          relationship: userData.parentData.relationship,
+          phone_number: userData.parentData.phone_number,
+          occupation: userData.parentData.occupation,
+          education_level: userData.parentData.education_level,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+
+      if (parentError) {
+        return NextResponse.json({ 
+          error: 'Failed to create parent record: ' + parentError.message 
+        }, { status: 500 })
+      }
+    }
+
+    return NextResponse.json({
+      message: 'User created successfully',
+      user: {
+        id: authData.user.id,
+        email: authData.user.email,
+        role: userData.role,
+      },
       profile: profileData
     })
 
   } catch (error) {
-    console.error('API error:', error)
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Internal server error: ' + (error as Error).message,
-      step: 'api_error'
-    }, { status: 500 })
+    console.error('Signup error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

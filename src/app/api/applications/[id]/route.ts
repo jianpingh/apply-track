@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function GET(
   request: NextRequest,
@@ -58,7 +63,9 @@ export async function PUT(
     const body = await request.json()
     const { student_id, ...updateData } = body
     
-    const { data: application, error } = await supabase
+    const supabaseClient = supabase
+    
+    const { data: application, error } = await supabaseClient
       .from('applications')
       .update(updateData)
       .eq('id', params.id)
@@ -85,7 +92,7 @@ export async function PUT(
     }
 
     // Log activity
-    await supabase.from('activity_log').insert({
+    await supabaseClient.from('activity_log').insert({
       user_id: student_id,
       student_id: student_id,
       application_id: params.id,
@@ -127,7 +134,8 @@ export async function DELETE(
     }
 
     // Log activity
-    await supabase.from('activity_log').insert({
+    const supabaseClientForLog = supabase as any
+    await supabaseClientForLog.from('activity_log').insert({
       user_id: studentId,
       student_id: studentId,
       application_id: params.id,
