@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import { 
   Eye, 
   DollarSign, 
@@ -15,7 +17,8 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
-  FileText
+  FileText,
+  LogOut
 } from 'lucide-react'
 import { formatDate, formatCurrency, getDaysUntilDeadline, getDeadlineStatus, getStatusColor } from '@/lib/utils'
 
@@ -62,9 +65,11 @@ const mockNotes = [
 ]
 
 export default function ParentDashboard() {
+  const router = useRouter()
   const [selectedChild, setSelectedChild] = useState(mockChildren[0])
   const [newNote, setNewNote] = useState('')
   const [notes, setNotes] = useState(mockNotes)
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
   const totalApplications = selectedChild.applications.length
   const submittedApplications = selectedChild.applications.filter(app => app.status === 'submitted').length
@@ -84,34 +89,64 @@ export default function ParentDashboard() {
     }
   }
 
+  const handleSignOut = async () => {
+    try {
+      setIsSigningOut(true)
+      // Clear any stored authentication data
+      localStorage.removeItem('authToken')
+      // Redirect to login page
+      router.push('/auth/login')
+    } catch (error) {
+      console.error('Sign out error:', error)
+      setIsSigningOut(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+      <header className="bg-white border-b shadow-sm">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Parent Dashboard</h1>
               <p className="text-gray-600">Monitor {selectedChild.name}'s application progress</p>
             </div>
             <div className="flex items-center space-x-4">
-              <select className="rounded-md border border-gray-300 px-3 py-2">
-                {mockChildren.map(child => (
-                  <option key={child.id} value={child.id}>{child.name}</option>
-                ))}
-              </select>
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium text-gray-900">Welcome back!</p>
+                <p className="text-xs text-gray-500">Parent Account</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleSignOut}
+                disabled={isSigningOut}
+              >
+                {isSigningOut ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2"></div>
+                    Signing out...
+                  </>
+                ) : (
+                  <>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </>
+                )}
+              </Button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">Applied Schools</CardTitle>
-              <Eye className="h-4 w-4 text-muted-foreground" />
+              <Eye className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalApplications}</div>
@@ -122,9 +157,9 @@ export default function ParentDashboard() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">Estimated Total Cost</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <DollarSign className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{formatCurrency(totalEstimatedCost)}</div>
@@ -135,9 +170,9 @@ export default function ParentDashboard() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">Urgent Items</CardTitle>
-              <AlertCircle className="h-4 w-4 text-muted-foreground" />
+              <AlertCircle className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-orange-600">{urgentDeadlines}</div>
@@ -148,9 +183,9 @@ export default function ParentDashboard() {
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{Math.round((submittedApplications / totalApplications) * 100)}%</div>
@@ -161,7 +196,7 @@ export default function ParentDashboard() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="applications">
@@ -172,7 +207,7 @@ export default function ParentDashboard() {
               </TabsList>
 
               <TabsContent value="applications" className="space-y-4">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">Application Details</h3>
                   <Badge variant="outline">{selectedChild.name} · Class of {selectedChild.graduation_year}</Badge>
                 </div>
@@ -182,9 +217,9 @@ export default function ParentDashboard() {
                     const deadlineStatus = getDeadlineStatus(application.deadline)
                     
                     return (
-                      <Card key={application.id} className="hover:shadow-md transition-shadow">
+                      <Card key={application.id} className="transition-shadow hover:shadow-md">
                         <CardHeader>
-                          <div className="flex justify-between items-start">
+                          <div className="flex items-start justify-between">
                             <div>
                               <CardTitle className="text-lg">{application.university.name}</CardTitle>
                               <CardDescription>
@@ -237,13 +272,13 @@ export default function ParentDashboard() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Cost Analysis</CardTitle>
-                    <CardDescription>4-year college education cost estimate</CardDescription>
+                    <CardDescription>4-year university education cost estimate</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-6">
                       {selectedChild.applications.map((app) => (
-                        <div key={app.id} className="border rounded-lg p-4">
-                          <div className="flex justify-between items-center mb-3">
+                        <div key={app.id} className="p-4 border rounded-lg">
+                          <div className="flex items-center justify-between mb-3">
                             <h4 className="font-semibold">{app.university.name}</h4>
                             <Badge variant="outline">
                               {app.financial_aid_requested ? 'Applied for Financial Aid' : 'No Financial Aid'}
@@ -253,24 +288,24 @@ export default function ParentDashboard() {
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <span className="text-gray-500">Annual Tuition:</span>
-                              <span className="font-medium ml-2">{formatCurrency(app.university.tuition)}</span>
+                              <span className="ml-2 font-medium">{formatCurrency(app.university.tuition)}</span>
                             </div>
                             <div>
                               <span className="text-gray-500">Room & Board:</span>
-                              <span className="font-medium ml-2">{formatCurrency(15000)}</span>
+                              <span className="ml-2 font-medium">{formatCurrency(15000)}</span>
                             </div>
                             <div>
                               <span className="text-gray-500">Living Expenses:</span>
-                              <span className="font-medium ml-2">{formatCurrency(8000)}</span>
+                              <span className="ml-2 font-medium">{formatCurrency(8000)}</span>
                             </div>
                             <div>
                               <span className="text-gray-500">Other Fees:</span>
-                              <span className="font-medium ml-2">{formatCurrency(3000)}</span>
+                              <span className="ml-2 font-medium">{formatCurrency(3000)}</span>
                             </div>
                           </div>
                           
-                          <div className="mt-3 pt-3 border-t">
-                            <div className="flex justify-between items-center">
+                          <div className="pt-3 mt-3 border-t">
+                            <div className="flex items-center justify-between">
                               <span className="font-semibold">4-Year Total Cost:</span>
                               <span className="text-lg font-bold text-blue-600">
                                 {formatCurrency(app.estimated_cost)}
@@ -280,8 +315,8 @@ export default function ParentDashboard() {
                         </div>
                       ))}
                       
-                      <div className="bg-blue-50 rounded-lg p-4">
-                        <div className="flex justify-between items-center">
+                      <div className="p-4 rounded-lg bg-blue-50">
+                        <div className="flex items-center justify-between">
                           <span className="text-lg font-semibold">Total Budget for All Schools:</span>
                           <span className="text-xl font-bold text-blue-600">
                             {formatCurrency(totalEstimatedCost)}
@@ -308,14 +343,14 @@ export default function ParentDashboard() {
                           const daysLeft = getDaysUntilDeadline(app.deadline)
                           
                           return (
-                            <div key={app.id} className="flex items-center space-x-4 p-3 border rounded-lg">
+                            <div key={app.id} className="flex items-center p-3 space-x-4 border rounded-lg">
                               <div className="flex-shrink-0">
                                 {app.status === 'submitted' ? (
-                                  <CheckCircle className="h-6 w-6 text-green-500" />
+                                  <CheckCircle className="w-6 h-6 text-green-500" />
                                 ) : daysLeft <= 7 ? (
-                                  <AlertCircle className="h-6 w-6 text-orange-500" />
+                                  <AlertCircle className="w-6 h-6 text-orange-500" />
                                 ) : (
-                                  <Clock className="h-6 w-6 text-gray-400" />
+                                  <Clock className="w-6 h-6 text-gray-400" />
                                 )}
                               </div>
                               <div className="flex-1">
@@ -326,7 +361,7 @@ export default function ParentDashboard() {
                                 <Badge className={deadlineStatus.color}>
                                   {daysLeft > 0 ? `${daysLeft} days` : daysLeft === 0 ? 'Today' : 'Overdue'}
                                 </Badge>
-                                <p className="text-xs text-gray-500 mt-1">
+                                <p className="mt-1 text-xs text-gray-500">
                                   {app.status === 'submitted' ? 'Submitted' : 'Pending'}
                                 </p>
                               </div>
@@ -346,7 +381,7 @@ export default function ParentDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
+                  <MessageSquare className="w-5 h-5 mr-2" />
                   Add Note
                 </CardTitle>
               </CardHeader>
@@ -369,9 +404,9 @@ export default function ParentDashboard() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {notes.map((note) => (
-                  <div key={note.id} className="p-3 bg-gray-50 rounded-lg">
+                  <div key={note.id} className="p-3 rounded-lg bg-gray-50">
                     <p className="text-sm">{note.text}</p>
-                    <div className="flex justify-between items-center mt-2">
+                    <div className="flex items-center justify-between mt-2">
                       <span className="text-xs text-gray-500">{note.application}</span>
                       <span className="text-xs text-gray-500">
                         {formatDate(note.created_at)}
@@ -388,20 +423,20 @@ export default function ParentDashboard() {
                 <CardTitle>Communication Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex items-center justify-between text-sm">
                   <span>This week's discussions</span>
                   <span className="font-medium">3 times</span>
                 </div>
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex items-center justify-between text-sm">
                   <span>Pending tasks</span>
                   <span className="font-medium">2 items</span>
                 </div>
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex items-center justify-between text-sm">
                   <span>Last updated</span>
                   <span className="font-medium">Today</span>
                 </div>
                 <Button variant="outline" className="w-full mt-3">
-                  <FileText className="h-4 w-4 mr-2" />
+                  <FileText className="w-4 h-4 mr-2" />
                   View Detailed Records
                 </Button>
               </CardContent>

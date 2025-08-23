@@ -118,7 +118,7 @@ export default function StudentDashboard() {
           <div className="flex justify-between items-center py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Student Dashboard</h1>
-              <p className="text-gray-600">Welcome back, {profile?.full_name || user?.email || 'Student'}! Manage your college application progress</p>
+              <p className="text-gray-600">Welcome back, {profile?.full_name || user?.email || 'Student'}! Manage your university application progress</p>
             </div>
             <div className="flex items-center space-x-4">
               <Bell className="h-5 w-5 text-gray-400" />

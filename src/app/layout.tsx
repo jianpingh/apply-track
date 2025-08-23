@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Apply Track - University Application Management',
   description: 'Track your university applications, deadlines, and progress with ease.',
-  keywords: ['university', 'college', 'application', 'tracking', 'admissions'],
+  keywords: ['university', 'application', 'tracking', 'admissions'],
 }
 
 export default function RootLayout({

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Select } from '@/components/ui/select'
 import { 
   Search, 
   Filter, 
@@ -180,12 +181,12 @@ export default function UniversitySearchPage() {
         <div className="mb-8 space-y-4">
           <div className="flex gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 placeholder="Search university name, city, or state..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-12 h-12 text-base"
               />
             </div>
             <Button
@@ -207,8 +208,7 @@ export default function UniversitySearchPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                   <div>
                     <label className="text-sm font-medium text-gray-700 mb-2 block">State</label>
-                    <select
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    <Select
                       value={filters.state}
                       onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
                     >
@@ -216,7 +216,7 @@ export default function UniversitySearchPage() {
                       {uniqueStates.map(state => (
                         <option key={state} value={state}>{state}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
 
                   <div>
@@ -229,7 +229,7 @@ export default function UniversitySearchPage() {
                       max="100"
                       value={filters.rankingMax}
                       onChange={(e) => setFilters(prev => ({ ...prev, rankingMax: parseInt(e.target.value) }))}
-                      className="w-full"
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
                   </div>
 
@@ -243,7 +243,7 @@ export default function UniversitySearchPage() {
                       max="50"
                       value={filters.acceptanceRateMin}
                       onChange={(e) => setFilters(prev => ({ ...prev, acceptanceRateMin: parseInt(e.target.value) }))}
-                      className="w-full"
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
                   </div>
 
@@ -258,7 +258,7 @@ export default function UniversitySearchPage() {
                       step="5000"
                       value={filters.tuitionMax}
                       onChange={(e) => setFilters(prev => ({ ...prev, tuitionMax: parseInt(e.target.value) }))}
-                      className="w-full"
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
                   </div>
 
