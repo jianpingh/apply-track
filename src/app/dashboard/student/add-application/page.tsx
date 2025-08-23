@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { 
   Search,
@@ -230,7 +236,7 @@ const universitiesData = [
 
 export default function AddApplicationPage() {
   const router = useRouter()
-  const [selectedUniversity, setSelectedUniversity] = useState(null)
+  const [selectedUniversity, setSelectedUniversity] = useState<any>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentStep, setCurrentStep] = useState('browse') // 'browse' or 'apply'
   const [currentPage, setCurrentPage] = useState(1)
@@ -280,12 +286,12 @@ export default function AddApplicationPage() {
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedUniversities = filteredUniversities.slice(startIndex, startIndex + itemsPerPage)
 
-  const handleSelectUniversity = (university) => {
+  const handleSelectUniversity = (university: any) => {
     setSelectedUniversity(university)
     setCurrentStep('apply')
   }
 
-  const handleAddApplication = (e) => {
+  const handleAddApplication = (e: React.FormEvent) => {
     e.preventDefault()
     if (selectedUniversity) {
       console.log('Adding application:', {
@@ -398,39 +404,54 @@ export default function AddApplicationPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
-                          <Select value={filters.state} onChange={(e) => {
-                            setFilters(prev => ({...prev, state: e.target.value}))
+                          <Select value={filters.state || "all"} onValueChange={(value) => {
+                            setFilters(prev => ({...prev, state: value === "all" ? "" : value}))
                             setCurrentPage(1)
                           }}>
-                            <option value="">All States</option>
-                            <option value="California">California</option>
-                            <option value="Massachusetts">Massachusetts</option>
-                            <option value="Connecticut">Connecticut</option>
-                            <option value="New Jersey">New Jersey</option>
+                            <SelectTrigger>
+                              <SelectValue placeholder="All States" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All States</SelectItem>
+                              <SelectItem value="California">California</SelectItem>
+                              <SelectItem value="Massachusetts">Massachusetts</SelectItem>
+                              <SelectItem value="Connecticut">Connecticut</SelectItem>
+                              <SelectItem value="New Jersey">New Jersey</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">Ranking</label>
-                          <Select value={filters.ranking} onChange={(e) => {
-                            setFilters(prev => ({...prev, ranking: e.target.value}))
+                          <Select value={filters.ranking || "all"} onValueChange={(value) => {
+                            setFilters(prev => ({...prev, ranking: value === "all" ? "" : value}))
                             setCurrentPage(1)
                           }}>
-                            <option value="">All Rankings</option>
-                            <option value="top10">Top 10</option>
-                            <option value="top25">Top 25</option>
-                            <option value="top50">Top 50</option>
+                            <SelectTrigger>
+                              <SelectValue placeholder="All Rankings" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Rankings</SelectItem>
+                              <SelectItem value="top10">Top 10</SelectItem>
+                              <SelectItem value="top25">Top 25</SelectItem>
+                              <SelectItem value="top50">Top 50</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">Selectivity</label>
-                          <Select value={filters.acceptanceRate} onChange={(e) => {
-                            setFilters(prev => ({...prev, acceptanceRate: e.target.value}))
+                          <Select value={filters.acceptanceRate || "all"} onValueChange={(value) => {
+                            setFilters(prev => ({...prev, acceptanceRate: value === "all" ? "" : value}))
                             setCurrentPage(1)
                           }}>
-                            <option value="">All Types</option>
-                            <option value="low">Highly Selective (&lt;10%)</option>
-                            <option value="medium">Selective (10-25%)</option>
-                            <option value="high">Less Selective (&gt;25%)</option>
+                            <SelectTrigger>
+                              <SelectValue placeholder="All Types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">All Types</SelectItem>
+                              <SelectItem value="low">Highly Selective (&lt;10%)</SelectItem>
+                              <SelectItem value="medium">Selective (10-25%)</SelectItem>
+                              <SelectItem value="high">Less Selective (&gt;25%)</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
                         <div>
@@ -658,7 +679,7 @@ export default function AddApplicationPage() {
                             Notable Alumni
                           </h4>
                           <div className="flex flex-wrap gap-3">
-                            {selectedUniversity.notable_alumni.map((alumni) => (
+                            {selectedUniversity.notable_alumni.map((alumni: string) => (
                               <Badge key={alumni} className="bg-amber-50 border-amber-200 text-amber-800 px-4 py-2 text-sm">
                                 {alumni}
                               </Badge>
@@ -675,7 +696,7 @@ export default function AddApplicationPage() {
                             Popular Academic Programs
                           </h4>
                           <div className="flex flex-wrap gap-3">
-                            {selectedUniversity.popular_majors.map((major) => (
+                            {selectedUniversity.popular_majors.map((major: string) => (
                               <Badge key={major} className="bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors px-4 py-2 text-sm">
                                 {major}
                               </Badge>
@@ -692,7 +713,7 @@ export default function AddApplicationPage() {
                             Key Strengths & Highlights
                           </h4>
                           <div className="flex flex-wrap gap-3">
-                            {selectedUniversity.highlights.map((highlight) => (
+                            {selectedUniversity.highlights.map((highlight: string) => (
                               <Badge key={highlight} className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-4 py-2 text-sm">
                                 {highlight}
                               </Badge>
@@ -743,27 +764,37 @@ export default function AddApplicationPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Application Type</label>
                         <Select 
                           value={applicationData.application_type} 
-                          onChange={(e) => setApplicationData(prev => ({...prev, application_type: e.target.value}))}
+                          onValueChange={(value) => setApplicationData(prev => ({...prev, application_type: value}))}
                         >
-                          {selectedUniversity.deadlines.early_action && (
-                            <option value="early_action">
-                              Early Action - Deadline: {selectedUniversity.deadlines.early_action}
-                            </option>
-                          )}
-                          <option value="regular_decision">
-                            Regular Decision - Deadline: {selectedUniversity.deadlines.regular_decision}
-                          </option>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select application type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {selectedUniversity.deadlines.early_action && (
+                              <SelectItem value="early_action">
+                                Early Action - Deadline: {selectedUniversity.deadlines.early_action}
+                              </SelectItem>
+                            )}
+                            <SelectItem value="regular_decision">
+                              Regular Decision - Deadline: {selectedUniversity.deadlines.regular_decision}
+                            </SelectItem>
+                          </SelectContent>
                         </Select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
                         <Select 
-                          value={applicationData.priority} 
-                          onChange={(e) => setApplicationData(prev => ({...prev, priority: parseInt(e.target.value)}))}
+                          value={applicationData.priority?.toString()} 
+                          onValueChange={(value) => setApplicationData(prev => ({...prev, priority: parseInt(value)}))}
                         >
-                          <option value={1}>High Priority (Dream School)</option>
-                          <option value={2}>Medium Priority (Target School)</option>
-                          <option value={3}>Low Priority (Safety School)</option>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select priority level" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">High Priority (Dream School)</SelectItem>
+                            <SelectItem value="2">Medium Priority (Target School)</SelectItem>
+                            <SelectItem value="3">Low Priority (Safety School)</SelectItem>
+                          </SelectContent>
                         </Select>
                       </div>
                     </div>
@@ -783,7 +814,7 @@ export default function AddApplicationPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedUniversity.requirements.map((req, index) => (
+                      {selectedUniversity.requirements.map((req: string, index: number) => (
                         <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
                           <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
                           <span className="text-sm text-gray-700">{req}</span>
@@ -825,13 +856,16 @@ export default function AddApplicationPage() {
                           </label>
                           <Select 
                             value={applicationData.major || ''} 
-                            onChange={(e) => setApplicationData(prev => ({...prev, major: e.target.value}))}
-                            className="w-full"
+                            onValueChange={(value) => setApplicationData(prev => ({...prev, major: value}))}
                           >
-                            <option value="">Select your preferred major</option>
-                            {selectedUniversity.popular_majors.map((major) => (
-                              <option key={major} value={major}>{major}</option>
-                            ))}
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select your preferred major" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {selectedUniversity.popular_majors.map((major: string) => (
+                                <SelectItem key={major} value={major}>{major}</SelectItem>
+                              ))}
+                            </SelectContent>
                           </Select>
                         </div>
 
@@ -841,13 +875,17 @@ export default function AddApplicationPage() {
                           </label>
                           <Select 
                             value={applicationData.application_type} 
-                            onChange={(e) => setApplicationData(prev => ({...prev, application_type: e.target.value}))}
-                            className="w-full"
+                            onValueChange={(value) => setApplicationData(prev => ({...prev, application_type: value}))}
                           >
-                            {selectedUniversity.deadlines.early_action && (
-                              <option value="early_action">Early Action - {selectedUniversity.deadlines.early_action}</option>
-                            )}
-                            <option value="regular_decision">Regular Decision - {selectedUniversity.deadlines.regular_decision}</option>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select application type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {selectedUniversity.deadlines.early_action && (
+                                <SelectItem value="early_action">Early Action - {selectedUniversity.deadlines.early_action}</SelectItem>
+                              )}
+                              <SelectItem value="regular_decision">Regular Decision - {selectedUniversity.deadlines.regular_decision}</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
 
@@ -856,13 +894,17 @@ export default function AddApplicationPage() {
                             Priority Level
                           </label>
                           <Select 
-                            value={applicationData.priority} 
-                            onChange={(e) => setApplicationData(prev => ({...prev, priority: parseInt(e.target.value)}))}
-                            className="w-full"
+                            value={applicationData.priority?.toString()} 
+                            onValueChange={(value) => setApplicationData(prev => ({...prev, priority: parseInt(value)}))}
                           >
-                            <option value={1}>🎯 High Priority (Dream School)</option>
-                            <option value={2}>📚 Medium Priority (Target School)</option>
-                            <option value={3}>✅ Low Priority (Safety School)</option>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select priority level" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">🎯 High Priority (Dream School)</SelectItem>
+                              <SelectItem value="2">📚 Medium Priority (Target School)</SelectItem>
+                              <SelectItem value="3">✅ Low Priority (Safety School)</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
 
@@ -872,14 +914,17 @@ export default function AddApplicationPage() {
                           </label>
                           <Select 
                             value={applicationData.graduation_year || ''} 
-                            onChange={(e) => setApplicationData(prev => ({...prev, graduation_year: e.target.value}))}
-                            className="w-full"
+                            onValueChange={(value) => setApplicationData(prev => ({...prev, graduation_year: value}))}
                           >
-                            <option value="">Select graduation year</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option>
-                            <option value="2030">2030</option>
-                            <option value="2031">2031</option>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select graduation year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="2028">2028</SelectItem>
+                              <SelectItem value="2029">2029</SelectItem>
+                              <SelectItem value="2030">2030</SelectItem>
+                              <SelectItem value="2031">2031</SelectItem>
+                            </SelectContent>
                           </Select>
                         </div>
                       </div>

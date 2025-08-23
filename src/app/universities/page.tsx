@@ -5,7 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Select } from '@/components/ui/select'
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { 
   Search, 
   Filter, 
@@ -209,13 +215,18 @@ export default function UniversitySearchPage() {
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-700">State</label>
                     <Select
-                      value={filters.state}
-                      onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
+                      value={filters.state || "all"}
+                      onValueChange={(value) => setFilters(prev => ({ ...prev, state: value === "all" ? "" : value }))}
                     >
-                      <option value="">All States</option>
-                      {uniqueStates.map(state => (
-                        <option key={state} value={state}>{state}</option>
-                      ))}
+                      <SelectTrigger>
+                        <SelectValue placeholder="All States" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All States</SelectItem>
+                        {uniqueStates.map(state => (
+                          <SelectItem key={state} value={state}>{state}</SelectItem>
+                        ))}
+                      </SelectContent>
                     </Select>
                   </div>
 
@@ -264,16 +275,20 @@ export default function UniversitySearchPage() {
 
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-700">Application System</label>
-                    <select
-                      className="w-full px-3 py-2 text-sm border rounded-md border-input bg-background"
-                      value={filters.applicationSystem}
-                      onChange={(e) => setFilters(prev => ({ ...prev, applicationSystem: e.target.value }))}
+                    <Select
+                      value={filters.applicationSystem || "all"}
+                      onValueChange={(value) => setFilters(prev => ({ ...prev, applicationSystem: value === "all" ? "" : value }))}
                     >
-                      <option value="">All Systems</option>
-                      {uniqueApplicationSystems.map(system => (
-                        <option key={system} value={system}>{system}</option>
-                      ))}
-                    </select>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="All Systems" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Systems</SelectItem>
+                        {uniqueApplicationSystems.map(system => (
+                          <SelectItem key={system} value={system}>{system}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
