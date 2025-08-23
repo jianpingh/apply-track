@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -15,9 +16,12 @@ import {
   TrendingUp,
   BookOpen,
   Target,
-  Bell
+  Bell,
+  LogOut,
+  User
 } from 'lucide-react'
 import { formatDate, getDaysUntilDeadline, getDeadlineStatus, getStatusColor } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
 
 // Mock data - replace with real data from Supabase
 const mockApplications = [
@@ -56,21 +60,21 @@ const mockApplications = [
 const mockUpcomingTasks = [
   {
     id: '1',
-    title: '完成 Harvard 个人陈述',
+    title: 'Complete Harvard personal statement',
     deadline: '2024-10-25',
     type: 'essay',
     university: 'Harvard University'
   },
   {
     id: '2',
-    title: '提交 SAT 成绩到 Stanford',
+    title: 'Submit SAT scores to Stanford',
     deadline: '2024-10-30',
     type: 'test_scores',
     university: 'Stanford University'
   },
   {
     id: '3',
-    title: '请求推荐信 - MIT',
+    title: 'Request recommendation letter - MIT',
     deadline: '2024-10-28',
     type: 'recommendation_letter',
     university: 'MIT'
@@ -78,14 +82,33 @@ const mockUpcomingTasks = [
 ]
 
 export default function StudentDashboard() {
+  const { user, profile, signOut } = useAuth()
+  const router = useRouter()
   const [applications, setApplications] = useState(mockApplications)
   const [upcomingTasks, setUpcomingTasks] = useState(mockUpcomingTasks)
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
   // Calculate statistics
   const totalApplications = applications.length
   const submittedApplications = applications.filter(app => app.status === 'submitted').length
   const urgentDeadlines = applications.filter(app => getDaysUntilDeadline(app.deadline) <= 7).length
   const overallProgress = applications.reduce((acc, app) => acc + (app.requirements_completed / app.requirements_total), 0) / applications.length * 100
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+    try {
+      const { error } = await signOut()
+      if (error) {
+        console.error('Sign out error:', error)
+      } else {
+        router.push('/')
+      }
+    } catch (err) {
+      console.error('Sign out failed:', err)
+    } finally {
+      setIsSigningOut(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,10 +118,38 @@ export default function StudentDashboard() {
           <div className="flex justify-between items-center py-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Student Dashboard</h1>
-              <p className="text-gray-600">Welcome back, manage your college application progress</p>
+              <p className="text-gray-600">Welcome back, {profile?.full_name || user?.email || 'Student'}! Manage your college application progress</p>
             </div>
             <div className="flex items-center space-x-4">
               <Bell className="h-5 w-5 text-gray-400" />
+              
+              {/* User Profile Menu */}
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
+                  <User className="h-5 w-5 text-gray-500" />
+                  <span className="text-sm text-gray-700">{profile?.full_name || user?.email || 'Student'}</span>
+                </div>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleSignOut}
+                  disabled={isSigningOut}
+                >
+                  {isSigningOut ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2"></div>
+                      Signing out...
+                    </>
+                  ) : (
+                    <>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </>
+                  )}
+                </Button>
+              </div>
+              
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
                 Add Application
