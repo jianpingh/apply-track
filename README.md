@@ -1,211 +1,275 @@
-# Apply Track - 大学申请追踪系统
+# Apply Track - University Application Management System
 
-一个现代化的大学申请管理平台，帮助学生和家长追踪申请进度、管理截止日期，优化申请流程。
+A modern university application management platform that helps students and parents track application progress, manage deadlines, and optimiz## 🚀 ## 🚀 Roadmap & Future Enhancementsoadmap & Future Enhancements
 
-## 🚀 功能特点
+We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
 
-### 🎓 学生功能
-- **申请管理**: 添加、编辑和追踪大学申请
-- **截止日期提醒**: 智能提醒即将到期的申请
-- **进度追踪**: 可视化显示申请完成状态
-- **大学搜索**: 根据多种条件筛选适合的大学
-- **材料清单**: 管理文书、推荐信、成绩单等申请材料
+### 🎓 Student Features
 
-### 👨‍👩‍👧‍👦 家长功能
-- **监控仪表板**: 查看孩子的申请状态
-- **费用规划**: 计算和规划大学费用
-- **备注系统**: 添加备注和沟通记录
-- **进度报告**: 了解申请整体进展
+- **Application Management**: Add, edit, and track university applications
+- **Deadline Reminders**: Smart alerts for upcoming application deadlines
+- **Progress Tracking**: Visual representation of application completion status
+- **University Search**: Filter suitable universities based on multiple criteria
+- **Document Management**: Manage essays, recommendation letters, transcripts, and other application materials
 
-### 🏫 大学数据库
-- **全面信息**: 排名、录取率、学费、专业等
-- **智能筛选**: 多维度筛选目标院校
-- **申请系统**: 支持 Common App、UC 系统等
-- **截止日期**: 自动同步各校申请截止时间
+### 👨‍👩‍👧‍👦 Parent Features
 
-## 🛠️ 技术栈
+- **Monitoring Dashboard**: View children's application status
+- **Financial Planning**: Calculate and plan university costs
+- **Notes System**: Add notes and communication records
+- **Progress Reports**: Understand overall application progress
 
-- **前端**: Next.js 14, React 18, TypeScript
-- **样式**: Tailwind CSS, Shadcn/UI
-- **后端**: Next.js API Routes
-- **数据库**: PostgreSQL (Supabase)
-- **认证**: Supabase Auth
-- **部署**: Vercel
+### 🏫 University Database
 
-## 📦 快速开始
+- **Comprehensive Information**: Rankings, acceptance rates, tuition, majors, etc.
+- **Smart Filtering**: Multi-dimensional filtering for target schools
+- **Application Systems**: Support for Common App, UC system, etc.
+- **Deadlines**: Automatic synchronization of application deadlines
 
-### 前置要求
+## 🛠️ Technology Stack
+
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS, Shadcn/UI
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL (Supabase)
+- **Authentication**: Supabase Auth
+- **Deployment**: Vercel
+
+## 📦 Quick Start
+
+### Prerequisites
+
 - Node.js 18+
-- npm 或 yarn
-- Supabase 账户
+- npm or yarn
+- Supabase account
 
-### 安装步骤
+### Installation Steps
 
-1. **克隆项目**
+1. **Clone the Project**
+
    ```bash
-   git clone https://github.com/yourusername/apply-track.git
+   git clone https://github.com/jianpingh/apply-track.git
    cd apply-track
    ```
 
-2. **安装依赖**
+2. **Install Dependencies**
+
    ```bash
    npm install
-   # 或
+   # or
    yarn install
    ```
 
-3. **环境配置**
+3. **Environment Configuration**
+
    ```bash
    cp .env.example .env.local
    ```
    
-   在 `.env.local` 中填入您的配置：
+   Fill in your configuration in `.env.local`:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
-4. **数据库设置**
+4. **Database Setup**
    
-   在 Supabase 中执行以下 SQL 文件：
+   Execute the following SQL files in Supabase:
    - `supabase/migrations/20241201000000_initial_schema.sql`
-   - `supabase/seed.sql` (可选，用于测试数据)
+   - `supabase/seed.sql` (optional, for test data)
 
-5. **启动开发服务器**
+5. **Start Development Server**
+
    ```bash
    npm run dev
-   # 或
+   # or
    yarn dev
    ```
 
-6. **访问应用**
+6. **Access Application**
    
-   打开 [http://localhost:3000](http://localhost:3000)
+   Open [http://localhost:3000](http://localhost:3000)
 
-## 🏗️ 项目结构
+## 🏗️ Project Structure
 
-```
+```text
 apply-track/
 ├── src/
 │   ├── app/                 # Next.js App Router
-│   │   ├── api/            # API 路由
-│   │   ├── auth/           # 认证页面
-│   │   ├── dashboard/      # 仪表板页面
-│   │   └── universities/   # 大学搜索页面
-│   ├── components/         # React 组件
-│   │   └── ui/            # UI 组件库
-│   ├── lib/               # 工具函数
-│   └── types/             # TypeScript 类型定义
+│   │   ├── api/            # API routes
+│   │   ├── auth/           # Authentication pages
+│   │   ├── dashboard/      # Dashboard pages
+│   │   └── universities/   # University search pages
+│   ├── components/         # React components
+│   │   └── ui/            # UI component library
+│   ├── lib/               # Utility functions
+│   └── types/             # TypeScript type definitions
 ├── supabase/
-│   ├── migrations/        # 数据库迁移文件
-│   └── seed.sql          # 示例数据
-└── public/               # 静态资源
+│   ├── migrations/        # Database migration files
+│   └── seed.sql          # Sample data
+└── public/               # Static assets
 ```
 
-## 📊 数据库设计
+## 📊 Database Design
 
-### 核心表结构
+### Core Table Structure
 
-- **profiles**: 用户基本信息
-- **students**: 学生学术信息
-- **parents**: 家长信息
-- **universities**: 大学信息
-- **applications**: 申请记录
-- **application_requirements**: 申请材料清单
-- **parent_notes**: 家长备注
-- **activity_log**: 操作日志
+- **profiles**: User basic information
+- **students**: Student academic information
+- **parents**: Parent information
+- **universities**: University information
+- **applications**: Application records
+- **application_requirements**: Application material checklist
+- **parent_notes**: Parent notes
+- **activity_log**: Operation logs
 
-## 🔒 权限管理
+## 🔒 Permission Management
 
-### 行级安全策略 (RLS)
-- 学生只能访问自己的申请数据
-- 家长只能查看关联学生的信息
-- 所有敏感操作都有权限验证
+### Row Level Security (RLS)
 
-### 角色设计
-- **Student**: 管理自己的申请
-- **Parent**: 监控关联学生的申请
-- **Teacher**: 指导多个学生 (未来功能)
-- **Admin**: 系统管理 (未来功能)
+- Students can only access their own application data
+- Parents can only view associated student information
+- All sensitive operations have permission verification
 
-## 🚀 部署
+### Role Design
 
-### Vercel 部署
+- **Student**: Manage their own applications
+- **Parent**: Monitor associated student applications
+- **Teacher**: Guide multiple students (future feature)
 
-1. **连接 GitHub**
-   - 在 Vercel 中导入项目
-   - 连接您的 GitHub 仓库
+## 🚀 Deployment
 
-2. **环境变量**
-   在 Vercel 项目设置中添加：
-   ```
+### Vercel Deployment
+
+1. **Connect GitHub**
+   - Import project in Vercel
+   - Connect your GitHub repository
+
+2. **Environment Variables**
+
+   Add in Vercel project settings:
+
+   ```text
    NEXT_PUBLIC_SUPABASE_URL
    NEXT_PUBLIC_SUPABASE_ANON_KEY
    ```
 
-3. **自动部署**
-   推送到 main 分支即可触发自动部署
+3. **Automatic Deployment**
+   Push to main branch to trigger automatic deployment
 
-### 其他平台
+### Other Platforms
 
-- **Railway**: 支持 PostgreSQL 数据库
-- **Netlify**: 适合静态部署
-- **Render**: 全栈应用部署
+- **Railway**: Supports PostgreSQL database
+- **Netlify**: Suitable for static deployment
+- **Render**: Full-stack application deployment
 
-## 🧪 测试
+## 🧪 Testing
 
 ```bash
-# 运行测试
+# Run tests
 npm test
 
-# 运行 E2E 测试
+# Run E2E tests
 npm run test:e2e
 
-# 代码检查
+# Code linting
 npm run lint
 ```
 
-## 📈 性能优化
+## 📈 Performance Optimization
 
-- **代码分割**: 使用动态导入
-- **图片优化**: Next.js Image 组件
-- **缓存策略**: API 路由缓存
-- **数据库优化**: 索引和查询优化
+- **Code Splitting**: Using dynamic imports
+- **Image Optimization**: Next.js Image component
+- **Caching Strategy**: API route caching
+- **Database Optimization**: Indexing and query optimization
 
-## 🔧 开发工具
+## 🔧 Development Tools
 
-- **ESLint**: 代码规范检查
-- **Prettier**: 代码格式化
-- **TypeScript**: 类型安全
-- **Tailwind CSS**: 样式管理
+- **ESLint**: Code standards checking
+- **Prettier**: Code formatting
+- **TypeScript**: Type safety
+- **Tailwind CSS**: Style management
 
-## 🤝 贡献指南
+## 🤝 Contributing Guidelines
 
-1. Fork 项目
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送分支 (`git push origin feature/AmazingFeature`)
-5. 创建 Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Create a Pull Request
 
-## 📝 许可证
+## � Roadmap & Future Enhancements
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
+### 📄 API development
 
-## 📞 支持
+### 📄 Document Management System
 
-如有问题或建议，请：
+- **Essay and Transcript Upload**: Comprehensive document upload system for essays, transcripts, and other application materials
+- **Version Control**: Track different versions of documents with revision history
+- **Document Templates**: Pre-built templates for common application essays
 
-- 创建 [Issue](https://github.com/yourusername/apply-track/issues)
-- 发送邮件至: support@applytrack.com
-- 查看 [文档](https://docs.applytrack.com)
+### ⏰ Smart Notifications
 
-## 🙏 致谢
+- **Automated Email Reminders**: Automatic email alerts for approaching application deadlines
+- **Customizable Alerts**: Personalized reminder settings based on user preferences
+- **Multi-channel Notifications**: SMS, email, and in-app notifications
 
-- [Next.js](https://nextjs.org/) - React 框架
-- [Supabase](https://supabase.com/) - 后端即服务
-- [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
-- [Shadcn/UI](https://ui.shadcn.com/) - UI 组件库
+### 🤖 AI-Powered Recommendations
+
+- **University Recommendation Engine**: Intelligent university suggestions based on student profiles, preferences, and academic performance
+- **Match Score Algorithm**: Calculate compatibility scores between students and universities
+- **Personalized Insights**: Data-driven insights to help students make informed decisions
+
+### 📊 Advanced Analytics Dashboard
+
+- **Application Pattern Analysis**: Visual insights into application trends and success rates
+- **Performance Metrics**: Track application outcomes and identify improvement areas
+- **Comparative Analytics**: Benchmark against similar student profiles
+
+### 🔗 External Integrations
+
+- **Common Application API**: Direct integration with Common App for streamlined applications
+- **University Data Services**: Real-time university information updates from official sources
+- **Standardized Test APIs**: Integration with SAT, ACT, and other testing services
+- **Financial Aid APIs**: Connect with FAFSA and scholarship databases
+
+### 🎯 Enhanced Features
+
+- **Mobile Application**: Native iOS and Android apps for on-the-go access
+- **Collaboration Tools**: Features for counselors and teachers to assist students
+- **Portfolio Builder**: Digital portfolio creation for arts and design programs
+- **Interview Scheduler**: Built-in scheduling system for university interviews
+
+## �📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## 📞 Support
+
+For questions or suggestions, please:
+
+- Create an [Issue](https://github.com/jianpingh/apply-track/issues)
+- Send email to: [support@applytrack.com](mailto:support@applytrack.com)
+- Check [Documentation](./docs/index.md)
+
+## 📚 Documentation
+
+For detailed setup and deployment instructions, please refer to our comprehensive documentation:
+
+- **[📖 Documentation Index](./docs/index.md)** - Complete documentation overview
+- **[⚙️ Environment Setup](./docs/ENV_SETUP.md)** - Local development setup
+- **[🗄️ Database Setup](./docs/DATABASE_SETUP.md)** - Database configuration
+- **[🚀 Deployment Guide](./docs/DEPLOYMENT_GUIDE.md)** - Production deployment
+
+## 🙏 Acknowledgments
+
+- [Next.js](https://nextjs.org/) - React framework
+- [Supabase](https://supabase.com/) - Backend as a Service
+- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [Shadcn/UI](https://ui.shadcn.com/) - UI component library
 
 ---
 
-**Apply Track** - 让大学申请管理变得简单高效 🎓
+**Apply Track** - Making university application management simple and efficient 🎓
