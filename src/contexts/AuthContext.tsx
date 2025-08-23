@@ -2,8 +2,13 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User, Session } from '@supabase/supabase-js'
-import { supabase, auth, profiles } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { Database } from '@/types/database.types'
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 
@@ -41,7 +46,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refreshProfile = async () => {
     if (user) {
-      const { data: profileData, error } = await profiles.get(user.id)
+      const { data: profileData, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+      
       if (!error && profileData) {
         setProfile(profileData)
       }
@@ -55,7 +65,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     phone?: string
   }) => {
     try {
-      const { data, error } = await auth.signUp(email, password, userData)
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: userData
+        }
+      })
       
       if (error) {
         return { data, error }
@@ -74,7 +90,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Wait a moment for user to be fully created
         await new Promise(resolve => setTimeout(resolve, 1000))
         
-        const { error: profileError } = await profiles.create(data.user.id, profileData)
+        const { error: profileError } = await (supabase as any)
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            email: profileData.email,
+            full_name: profileData.full_name,
+            role: profileData.role,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+        
         if (profileError) {
           console.error('Error creating profile:', profileError)
           // Don't return the profile error as the main error since user was created
@@ -90,12 +116,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await auth.signIn(email, password)
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
     return { data, error }
   }
 
   const signOut = async () => {
-    const { error } = await auth.signOut()
+    const { error } = await supabase.auth.signOut()
     if (!error) {
       setUser(null)
       setProfile(null)
@@ -107,14 +136,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      const { session: initialSession } = await auth.getSession()
+      const { data: { session: initialSession } } = await supabase.auth.getSession()
       
       if (initialSession) {
         setSession(initialSession)
         setUser(initialSession.user)
         
         // Load user profile
-        const { data: profileData } = await profiles.get(initialSession.user.id)
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', initialSession.user.id)
+          .single()
+          
         if (profileData) {
           setProfile(profileData)
         }
@@ -135,7 +169,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (session?.user) {
           // Load user profile when logged in
-          const { data: profileData } = await profiles.get(session.user.id)
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+            
           if (profileData) {
             setProfile(profileData)
           }
