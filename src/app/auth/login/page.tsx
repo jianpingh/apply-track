@@ -42,17 +42,38 @@ export default function LoginPage() {
         return
       }
 
-      if (data.user) {
-        // Get user profile to determine redirect destination
-        const userMetadata = data.user.user_metadata
-        const role = userMetadata?.role
+      if (data.user && data.session) {
+        console.log('Login successful for:', data.user.email)
         
-        if (role === 'student') {
-          router.push('/dashboard/student')
-        } else if (role === 'parent') {
-          router.push('/dashboard/parent')
-        } else {
-          router.push('/dashboard/student') // Default fallback
+        // Wait a bit to ensure auth state is properly set
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Get user profile to determine redirect destination
+        try {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', data.user.id)
+            .single()
+          
+          const role = profileData?.role || data.user.user_metadata?.role
+          
+          if (role === 'student') {
+            router.push('/dashboard/student')
+          } else if (role === 'parent') {
+            router.push('/dashboard/parent')
+          } else {
+            router.push('/dashboard/student') // Default fallback
+          }
+        } catch (profileError) {
+          console.log('Profile lookup failed, using metadata:', profileError)
+          // Fallback to user metadata
+          const role = data.user.user_metadata?.role
+          if (role === 'parent') {
+            router.push('/dashboard/parent')
+          } else {
+            router.push('/dashboard/student')
+          }
         }
       }
     } catch (err) {
