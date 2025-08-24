@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function AuthTest() {
-  const { user, profile, session, loading, signOut } = useAuth()
+  const { user, profile, studentProfile, parentProfile, session, loading, signOut } = useAuth()
   const router = useRouter()
 
   const handleSignOut = async () => {
@@ -85,18 +85,6 @@ export default function AuthTest() {
                 <label className="font-medium text-gray-700">Role:</label>
                 <p className="text-gray-900 capitalize">{profile.role}</p>
               </div>
-              {profile.graduation_year && (
-                <div>
-                  <label className="font-medium text-gray-700">Graduation Year:</label>
-                  <p className="text-gray-900">{profile.graduation_year}</p>
-                </div>
-              )}
-              {profile.phone && (
-                <div>
-                  <label className="font-medium text-gray-700">Phone:</label>
-                  <p className="text-gray-900">{profile.phone}</p>
-                </div>
-              )}
               <div>
                 <label className="font-medium text-gray-700">Created:</label>
                 <p className="text-gray-900">{profile.created_at ? new Date(profile.created_at).toLocaleString() : 'Unknown'}</p>
@@ -106,6 +94,72 @@ export default function AuthTest() {
             <p className="text-yellow-600">Profile not loaded or not found</p>
           )}
         </div>
+
+        {/* Student Profile Information */}
+        {profile?.role === 'student' && (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Student Profile Information</h2>
+            {studentProfile ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="font-medium text-gray-700">Graduation Year:</label>
+                  <p className="text-gray-900">{studentProfile.graduation_year}</p>
+                </div>
+                {studentProfile.gpa && (
+                  <div>
+                    <label className="font-medium text-gray-700">GPA:</label>
+                    <p className="text-gray-900">{studentProfile.gpa}</p>
+                  </div>
+                )}
+                {studentProfile.sat_score && (
+                  <div>
+                    <label className="font-medium text-gray-700">SAT Score:</label>
+                    <p className="text-gray-900">{studentProfile.sat_score}</p>
+                  </div>
+                )}
+                {studentProfile.act_score && (
+                  <div>
+                    <label className="font-medium text-gray-700">ACT Score:</label>
+                    <p className="text-gray-900">{studentProfile.act_score}</p>
+                  </div>
+                )}
+                {studentProfile.high_school && (
+                  <div>
+                    <label className="font-medium text-gray-700">High School:</label>
+                    <p className="text-gray-900">{studentProfile.high_school}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-yellow-600">Student profile not found</p>
+            )}
+          </div>
+        )}
+
+        {/* Parent Profile Information */}
+        {profile?.role === 'parent' && (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Parent Profile Information</h2>
+            {parentProfile ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {parentProfile.phone && (
+                  <div>
+                    <label className="font-medium text-gray-700">Phone:</label>
+                    <p className="text-gray-900">{parentProfile.phone}</p>
+                  </div>
+                )}
+                {parentProfile.occupation && (
+                  <div>
+                    <label className="font-medium text-gray-700">Occupation:</label>
+                    <p className="text-gray-900">{parentProfile.occupation}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-yellow-600">Parent profile not found</p>
+            )}
+          </div>
+        )}
 
         {/* Session Information */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">

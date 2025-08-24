@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Eye, EyeOff, GraduationCap, AlertCircle, Loader2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -56,7 +57,7 @@ export default function LoginPage() {
             .eq('id', data.user.id)
             .single()
           
-          const role = profileData?.role || data.user.user_metadata?.role
+          const role = (profileData as any)?.role || data.user.user_metadata?.role
           
           if (role === 'student') {
             router.push('/dashboard/student')

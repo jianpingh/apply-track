@@ -39,10 +39,13 @@ export default function AuthCallback() {
               .eq('id', data.session.user.id)
               .single()
             
-            if (profileData?.role === 'parent') {
-              redirectPath = '/dashboard/parent'
-            } else if (profileData?.role === 'student') {
-              redirectPath = '/dashboard/student'
+            if (profileData) {
+              const role = (profileData as { role: string }).role
+              if (role === 'parent') {
+                redirectPath = '/dashboard/parent'
+              } else if (role === 'student') {
+                redirectPath = '/dashboard/student'
+              }
             }
           } catch (profileError) {
             console.log('Profile not found, using user metadata')

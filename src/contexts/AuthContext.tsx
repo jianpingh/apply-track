@@ -6,10 +6,14 @@ import { supabase } from '@/lib/supabase'
 import { Database } from '@/types/database.types'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
+type StudentProfile = Database['public']['Tables']['students']['Row']
+type ParentProfile = Database['public']['Tables']['parents']['Row']
 
 interface AuthContextType {
   user: User | null
   profile: Profile | null
+  studentProfile: StudentProfile | null
+  parentProfile: ParentProfile | null
   session: Session | null
   loading: boolean
   signUp: (email: string, password: string, userData: {
@@ -36,6 +40,8 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
+  const [parentProfile, setParentProfile] = useState<ParentProfile | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -50,6 +56,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (!error && profileData) {
           setProfile(profileData)
+          
+          // Load additional profile data based on role
+          if ((profileData as any)?.role === 'student') {
+            const { data: studentData } = await supabase
+              .from('students')
+              .select('*')
+              .eq('id', user.id)
+              .single()
+            
+            if (studentData) {
+              setStudentProfile(studentData)
+            }
+          } else if ((profileData as any)?.role === 'parent') {
+            const { data: parentData } = await supabase
+              .from('parents')
+              .select('*')
+              .eq('id', user.id)
+              .single()
+            
+            if (parentData) {
+              setParentProfile(parentData)
+            }
+          }
         }
       } catch (error) {
         console.error('Error refreshing profile:', error)
@@ -85,8 +114,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: email,
           full_name: userData.full_name,
           role: userData.role,
-          graduation_year: userData.graduation_year,
-          phone: userData.phone,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }
@@ -96,10 +123,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         const { error: profileError } = await supabase
           .from('profiles')
-          .insert(profileData)
+          .insert(profileData as any)
         
         if (profileError) {
           console.error('Error creating profile:', profileError)
+        } else {
+          // Create role-specific profile
+          if (userData.role === 'student' && userData.graduation_year) {
+            const { error: studentError } = await supabase
+              .from('students')
+              .insert({
+                id: data.user.id,
+                graduation_year: userData.graduation_year,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              } as any)
+            
+            if (studentError) {
+              console.error('Error creating student profile:', studentError)
+            }
+          } else if (userData.role === 'parent' && userData.phone) {
+            const { error: parentError } = await supabase
+              .from('parents')
+              .insert({
+                id: data.user.id,
+                phone: userData.phone,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              } as any)
+            
+            if (parentError) {
+              console.error('Error creating parent profile:', parentError)
+            }
+          }
         }
       }
       
@@ -147,6 +203,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!error) {
         setUser(null)
         setProfile(null)
+        setStudentProfile(null)
+        setParentProfile(null)
         setSession(null)
         
         // Clear any cached data
@@ -194,6 +252,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               
             if (!profileError && profileData && isMounted) {
               setProfile(profileData)
+              
+              // Load additional profile data based on role
+              if ((profileData as any)?.role === 'student') {
+                const { data: studentData } = await supabase
+                  .from('students')
+                  .select('*')
+                  .eq('id', initialSession.user.id)
+                  .single()
+                
+                if (studentData) {
+                  setStudentProfile(studentData)
+                }
+              } else if ((profileData as any)?.role === 'parent') {
+                const { data: parentData } = await supabase
+                  .from('parents')
+                  .select('*')
+                  .eq('id', initialSession.user.id)
+                  .single()
+                
+                if (parentData) {
+                  setParentProfile(parentData)
+                }
+              }
             }
           } catch (profileErr) {
             console.error('Error loading profile:', profileErr)
@@ -233,6 +314,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 
               if (!profileError && profileData) {
                 setProfile(profileData)
+                
+                // Load additional profile data based on role
+                if ((profileData as any)?.role === 'student') {
+                  const { data: studentData } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single()
+                  
+                  if (studentData) {
+                    setStudentProfile(studentData)
+                  }
+                } else if ((profileData as any)?.role === 'parent') {
+                  const { data: parentData } = await supabase
+                    .from('parents')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single()
+                  
+                  if (parentData) {
+                    setParentProfile(parentData)
+                  }
+                }
               }
             } catch (err) {
               console.error('Error loading profile on auth change:', err)
@@ -242,11 +346,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setSession(null)
           setUser(null)
           setProfile(null)
+          setStudentProfile(null)
+          setParentProfile(null)
           
           // Clear cached data
           if (typeof window !== 'undefined') {
             localStorage.removeItem('apply-track-user')
             localStorage.removeItem('apply-track-profile')
+            localStorage.removeItem('apply-track-student-profile')
+            localStorage.removeItem('apply-track-parent-profile')
           }
         }
         
@@ -263,6 +371,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value: AuthContextType = {
     user,
     profile,
+    studentProfile,
+    parentProfile,
     session,
     loading,
     signUp,
