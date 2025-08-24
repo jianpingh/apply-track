@@ -204,7 +204,7 @@ npm run lint
 ## � Roadmap & Future Enhancements
 
 We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
-### 🚀 API Development
+### 🚀 API Development (TODO) & JWT Auth (TODO)
 
 ### 📄 Document Management System
 
