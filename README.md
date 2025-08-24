@@ -4,10 +4,6 @@ A modern university application tracking platform that helps students and parent
 
 We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
 
-### 📄 Document Management System
-
-- **Essay and Transcript Upload**: Comprehensive document upload system for essays, transcripts, and other application materialsapplication process.
-
 ## 🚀 Features
 
 ### 🎓 Student Features
@@ -208,7 +204,7 @@ npm run lint
 ## � Roadmap & Future Enhancements
 
 We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
-### 📄 
+### 🚀 API Development
 
 ### 📄 Document Management System
 
