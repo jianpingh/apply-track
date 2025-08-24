@@ -18,7 +18,7 @@ export default function HomePage() {
               <Link href="/auth/login">
                 <Button variant="outline">Sign In</Button>
               </Link>
-              <Link href="/auth/signup">
+              <Link href="/auth/role-select">
                 <Button>Get Started</Button>
               </Link>
             </div>
@@ -56,7 +56,7 @@ export default function HomePage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link href="/auth/signup">
+            <Link href="/auth/role-select">
               <Button size="lg" className="px-10 py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
                 Start Your Journey Free
                 <span className="ml-2">→</span>
@@ -209,7 +209,7 @@ export default function HomePage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <Link href="/auth/signup">
+              <Link href="/auth/role-select">
                 <Button size="lg" variant="secondary" className="px-12 py-4 text-lg font-semibold bg-white text-blue-600 hover:bg-gray-50 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-200">
                   Start Your Free Trial
                   <span className="ml-2">🚀</span>
