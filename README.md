@@ -1,8 +1,14 @@
-# Apply Track - University Application Management System
+# Apply Track - University Application Tracking System
 
-A modern university application management platform that helps students and parents track application progress, manage deadlines, and optimiz## 🚀 ## 🚀 Roadmap & Future Enhancementsoadmap & Future Enhancements
+A modern university application tracking platform that helps students and parents track application progress, manage deadlines, and optimiz## 🚀 ## 🚀 Roadmap & Future Enhancementsoadmap & Future Enhancements
 
 We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
+
+### 📄 Document Management System
+
+- **Essay and Transcript Upload**: Comprehensive document upload system for essays, transcripts, and other application materialsapplication process.
+
+## 🚀 Features
 
 ### 🎓 Student Features
 
@@ -48,7 +54,7 @@ We are continuously working to improve Apply Track. Here are the upcoming featur
 1. **Clone the Project**
 
    ```bash
-   git clone https://github.com/jianpingh/apply-track.git
+   git clone https://github.com/yourusername/apply-track.git
    cd apply-track
    ```
 
@@ -202,7 +208,7 @@ npm run lint
 ## � Roadmap & Future Enhancements
 
 We are continuously working to improve Apply Track. Here are the upcoming features and enhancements planned:
-### 📄 API development
+### 📄 
 
 ### 📄 Document Management System
 
@@ -250,18 +256,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions or suggestions, please:
 
-- Create an [Issue](https://github.com/jianpingh/apply-track/issues)
+- Create an [Issue](https://github.com/yourusername/apply-track/issues)
 - Send email to: [support@applytrack.com](mailto:support@applytrack.com)
-- Check [Documentation](./docs/index.md)
-
-## 📚 Documentation
-
-For detailed setup and deployment instructions, please refer to our comprehensive documentation:
-
-- **[📖 Documentation Index](./docs/index.md)** - Complete documentation overview
-- **[⚙️ Environment Setup](./docs/ENV_SETUP.md)** - Local development setup
-- **[🗄️ Database Setup](./docs/DATABASE_SETUP.md)** - Database configuration
-- **[🚀 Deployment Guide](./docs/DEPLOYMENT_GUIDE.md)** - Production deployment
+- Check [Documentation](https://docs.applytrack.com)
 
 ## 🙏 Acknowledgments
 

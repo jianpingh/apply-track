@@ -86,30 +86,25 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <GraduationCap className="h-10 w-10 text-blue-600 mr-2" />
-            <h1 className="text-3xl font-bold text-gray-900">Apply Track</h1>
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center mb-6">
+            <GraduationCap className="h-10 w-10 text-blue-600 mr-3" />
+            <h1 className="text-2xl font-bold text-gray-900">Apply Track</h1>
           </div>
-          <p className="text-gray-600">Sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">Welcome Back</h2>
+          <p className="text-gray-600">Sign in to continue your journey</p>
         </div>
 
         {/* Login Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
-            <CardDescription>
-              Enter your credentials to access your dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+          <CardContent className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-md p-3 flex items-center text-red-700">
-                  <AlertCircle className="h-4 w-4 mr-2 flex-shrink-0" />
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center text-red-700">
+                  <AlertCircle className="h-5 w-5 mr-3 flex-shrink-0" />
                   <span className="text-sm">{error}</span>
                 </div>
               )}
@@ -127,6 +122,7 @@ export default function LoginPage() {
                   onChange={handleChange}
                   required
                   disabled={isLoading}
+                  className="h-12 px-4 border-gray-300 focus:border-blue-500 focus:ring-blue-200"
                 />
               </div>
 
@@ -144,10 +140,11 @@ export default function LoginPage() {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
+                    className="h-12 px-4 border-gray-300 focus:border-blue-500 focus:ring-blue-200 pr-12"
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
                   >
@@ -162,7 +159,7 @@ export default function LoginPage() {
 
               <Button 
                 type="submit" 
-                className="w-full" 
+                className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-base font-medium" 
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -176,18 +173,16 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-8 text-center space-y-4">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link href="/auth/signup" className="text-blue-600 hover:underline font-medium">
-                  Sign up here
+                <Link href="/auth/role-select" className="text-blue-600 hover:text-blue-700 font-medium underline">
+                  Create Account
                 </Link>
               </p>
-            </div>
-
-            <div className="mt-4 text-center">
-              <Link href="/" className="text-sm text-gray-500 hover:underline">
-                Back to Home
+              
+              <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700">
+                ← Back to Home
               </Link>
             </div>
           </CardContent>

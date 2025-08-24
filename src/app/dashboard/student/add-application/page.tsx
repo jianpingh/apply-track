@@ -329,12 +329,12 @@ export default function AddApplicationPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-20 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-20 border-b border-gray-200 shadow-sm bg-white/80 backdrop-blur-sm">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="icon" onClick={() => router.back()}>
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="w-4 h-4" />
               </Button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
@@ -353,26 +353,23 @@ export default function AddApplicationPage() {
                 <Button variant="outline" onClick={() => setCurrentStep('browse')}>
                   Back to Browse
                 </Button>
-                <Button onClick={handleAddApplication} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  Add to My Applications
-                </Button>
               </div>
             )}
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {currentStep === 'browse' ? (
           <div>
             {/* Search and Filter Section */}
             <div className="mb-8">
               <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
                 <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row gap-4">
+                  <div className="flex flex-col gap-4 lg:flex-row">
                     <div className="flex-1">
                       <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                        <Search className="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                         <Input
                           placeholder="Search universities, cities, majors..."
                           value={searchTerm}
@@ -387,9 +384,9 @@ export default function AddApplicationPage() {
                     <Button
                       variant="outline"
                       onClick={() => setShowFilters(!showFilters)}
-                      className="lg:w-auto w-full"
+                      className="w-full lg:w-auto"
                     >
-                      <Filter className="h-4 w-4 mr-2" />
+                      <Filter className="w-4 h-4 mr-2" />
                       Filters
                     </Button>
                     {(searchTerm || Object.values(filters).some(f => f)) && (
@@ -400,10 +397,10 @@ export default function AddApplicationPage() {
                   </div>
                   
                   {showFilters && (
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="pt-6 mt-6 border-t border-gray-200">
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+                          <label className="block mb-2 text-sm font-medium text-gray-700">State</label>
                           <Select value={filters.state || "all"} onValueChange={(value) => {
                             setFilters(prev => ({...prev, state: value === "all" ? "" : value}))
                             setCurrentPage(1)
@@ -421,7 +418,7 @@ export default function AddApplicationPage() {
                           </Select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Ranking</label>
+                          <label className="block mb-2 text-sm font-medium text-gray-700">Ranking</label>
                           <Select value={filters.ranking || "all"} onValueChange={(value) => {
                             setFilters(prev => ({...prev, ranking: value === "all" ? "" : value}))
                             setCurrentPage(1)
@@ -438,7 +435,7 @@ export default function AddApplicationPage() {
                           </Select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Selectivity</label>
+                          <label className="block mb-2 text-sm font-medium text-gray-700">Selectivity</label>
                           <Select value={filters.acceptanceRate || "all"} onValueChange={(value) => {
                             setFilters(prev => ({...prev, acceptanceRate: value === "all" ? "" : value}))
                             setCurrentPage(1)
@@ -455,7 +452,7 @@ export default function AddApplicationPage() {
                           </Select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Major Interest</label>
+                          <label className="block mb-2 text-sm font-medium text-gray-700">Major Interest</label>
                           <Input
                             placeholder="e.g. Computer Science"
                             value={filters.major}
@@ -473,7 +470,7 @@ export default function AddApplicationPage() {
             </div>
 
             {/* Results Summary */}
-            <div className="mb-6 flex justify-between items-center">
+            <div className="flex items-center justify-between mb-6">
               <p className="text-gray-600">
                 Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredUniversities.length)} of {filteredUniversities.length} universities
               </p>
@@ -483,59 +480,59 @@ export default function AddApplicationPage() {
             </div>
 
             {/* Universities Grid */}
-            <div className="space-y-6 mb-8">
+            <div className="mb-8 space-y-6">
               {paginatedUniversities.map((university) => (
-                <Card key={university.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-0 shadow-lg bg-white">
+                <Card key={university.id} className="overflow-hidden transition-all duration-300 bg-white border-0 shadow-lg hover:shadow-xl">
                   <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-3">
                           <h3 className="text-2xl font-bold text-gray-900">{university.name}</h3>
                           <div className="flex items-center space-x-2">
-                            <Badge className="bg-blue-100 text-blue-800 font-semibold">
+                            <Badge className="font-semibold text-blue-800 bg-blue-100">
                               #{university.us_news_ranking} US News
                             </Badge>
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div className="grid grid-cols-2 gap-4 mb-4 md:grid-cols-4">
                           <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <MapPin className="h-4 w-4 text-blue-500" />
+                            <MapPin className="w-4 h-4 text-blue-500" />
                             <span>{university.city}, {university.state}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Building className="h-4 w-4 text-green-500" />
+                            <Building className="w-4 h-4 text-green-500" />
                             <span>Founded {university.founded}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Users className="h-4 w-4 text-purple-500" />
+                            <Users className="w-4 h-4 text-purple-500" />
                             <span>{university.student_body.toLocaleString()} students</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Globe className="h-4 w-4 text-orange-500" />
+                            <Globe className="w-4 h-4 text-orange-500" />
                             <span>{university.campus_size}</span>
                           </div>
                         </div>
                         
-                        <p className="text-gray-700 mb-4 leading-relaxed">{university.description}</p>
+                        <p className="mb-4 leading-relaxed text-gray-700">{university.description}</p>
                       </div>
                     </div>
 
                     {/* Popular Academic Programs and Action Button Row */}
                     <div className="flex items-center justify-between">
                       <div className="flex-1 mr-6">
-                        <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                          <BookOpen className="h-4 w-4 mr-1 text-slate-500" />
+                        <h4 className="flex items-center mb-2 text-sm font-semibold text-gray-700">
+                          <BookOpen className="w-4 h-4 mr-1 text-slate-500" />
                           Popular Academic Programs
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {university.popular_majors.slice(0, 4).map((major) => (
-                            <Badge key={major} className="bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors text-xs">
+                            <Badge key={major} className="text-xs transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200">
                               {major}
                             </Badge>
                           ))}
                           {university.popular_majors.length > 4 && (
-                            <Badge className="bg-gray-50 text-gray-500 text-xs">
+                            <Badge className="text-xs text-gray-500 bg-gray-50">
                               +{university.popular_majors.length - 4} more
                             </Badge>
                           )}
@@ -545,7 +542,7 @@ export default function AddApplicationPage() {
                       <div className="flex-shrink-0">
                         <Button 
                           onClick={() => handleSelectUniversity(university)}
-                          className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+                          className="px-6 py-2 font-medium text-white transition-all duration-200 rounded-lg shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg"
                         >
                           Start Application Process
                         </Button>
@@ -558,14 +555,14 @@ export default function AddApplicationPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center space-x-4">
+              <div className="flex items-center justify-center space-x-4">
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className="w-24 h-10 flex items-center justify-center"
+                  className="flex items-center justify-center w-24 h-10"
                 >
-                  <ChevronLeft className="h-4 w-4 mr-2" />
+                  <ChevronLeft className="w-4 h-4 mr-2" />
                   Previous
                 </Button>
                 
@@ -589,49 +586,49 @@ export default function AddApplicationPage() {
                   variant="outline"
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="w-20 h-10 flex items-center justify-center"
+                  className="flex items-center justify-center w-20 h-10"
                 >
                   Next
-                  <ChevronRight className="h-4 w-4 ml-2" />
+                  <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             )}
           </div>
         ) : (
           // Application Configuration Step
-          <div className="max-w-7xl mx-auto">
+          <div className="mx-auto max-w-7xl">
             {selectedUniversity && (
               <div className="space-y-6">
                 {/* University Header */}
                 <Card className="overflow-hidden border-0 shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-slate-50 to-gray-100 border-b border-gray-200">
-                    <div className="flex justify-between items-start">
+                  <CardHeader className="border-b border-gray-200 bg-gradient-to-r from-slate-50 to-gray-100">
+                    <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-4xl font-bold mb-2 text-gray-800">{selectedUniversity.name}</CardTitle>
-                        <CardDescription className="text-xl text-gray-600 mb-4">
+                        <CardTitle className="mb-2 text-4xl font-bold text-gray-800">{selectedUniversity.name}</CardTitle>
+                        <CardDescription className="mb-4 text-xl text-gray-600">
                           {selectedUniversity.city}, {selectedUniversity.state} • Founded {selectedUniversity.founded}
                         </CardDescription>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-gray-600 mb-4">
+                        <div className="grid grid-cols-2 gap-4 mb-4 text-gray-600 md:grid-cols-4">
                           <div className="flex items-center space-x-2">
-                            <MapPin className="h-4 w-4" />
+                            <MapPin className="w-4 h-4" />
                             <span>{selectedUniversity.city}, {selectedUniversity.state}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Building className="h-4 w-4" />
+                            <Building className="w-4 h-4" />
                             <span>Founded {selectedUniversity.founded}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Users className="h-4 w-4" />
+                            <Users className="w-4 h-4" />
                             <span>{selectedUniversity.student_body.toLocaleString()} students</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Globe className="h-4 w-4" />
+                            <Globe className="w-4 h-4" />
                             <span>{selectedUniversity.campus_size}</span>
                           </div>
                         </div>
-                        <p className="text-gray-700 leading-relaxed max-w-4xl text-lg">{selectedUniversity.description}</p>
+                        <p className="max-w-4xl text-lg leading-relaxed text-gray-700">{selectedUniversity.description}</p>
                       </div>
-                      <Badge className="bg-gray-100 text-gray-700 border border-gray-300 font-semibold text-lg px-4 py-2">
+                      <Badge className="px-4 py-2 text-lg font-semibold text-gray-700 bg-gray-100 border border-gray-300">
                         #{selectedUniversity.us_news_ranking} US News
                       </Badge>
                     </div>
@@ -639,48 +636,48 @@ export default function AddApplicationPage() {
                   
                   {/* Statistics Grid */}
                   <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                      <div className="text-center p-6 bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl border border-gray-200">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-600 text-white rounded-full mb-3">
-                          <Users className="h-6 w-6" />
+                    <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
+                      <div className="p-6 text-center border border-gray-200 bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl">
+                        <div className="inline-flex items-center justify-center w-12 h-12 mb-3 text-white bg-gray-600 rounded-full">
+                          <Users className="w-6 h-6" />
                         </div>
-                        <p className="text-sm text-gray-600 font-medium mb-1">Acceptance Rate</p>
+                        <p className="mb-1 text-sm font-medium text-gray-600">Acceptance Rate</p>
                         <p className="text-3xl font-bold text-gray-800">{selectedUniversity.acceptance_rate}%</p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="mt-1 text-sm text-gray-500">
                           {selectedUniversity.acceptance_rate < 10 ? 'Highly Selective' : 
                            selectedUniversity.acceptance_rate < 25 ? 'Selective' : 'Moderately Selective'}
                         </p>
                       </div>
-                      <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl border border-emerald-200">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-600 text-white rounded-full mb-3">
-                          <DollarSign className="h-6 w-6" />
+                      <div className="p-6 text-center border bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl border-emerald-200">
+                        <div className="inline-flex items-center justify-center w-12 h-12 mb-3 text-white rounded-full bg-emerald-600">
+                          <DollarSign className="w-6 h-6" />
                         </div>
-                        <p className="text-sm text-emerald-700 font-medium mb-1">Annual Tuition</p>
+                        <p className="mb-1 text-sm font-medium text-emerald-700">Annual Tuition</p>
                         <p className="text-3xl font-bold text-emerald-800">${selectedUniversity.tuition_out_state.toLocaleString()}</p>
-                        <p className="text-sm text-emerald-600 mt-1">Out-of-State</p>
+                        <p className="mt-1 text-sm text-emerald-600">Out-of-State</p>
                       </div>
-                      <div className="text-center p-6 bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl border border-gray-200">
-                        <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-600 text-white rounded-full mb-3">
-                          <Calendar className="h-6 w-6" />
+                      <div className="p-6 text-center border border-gray-200 bg-gradient-to-br from-slate-50 to-gray-100 rounded-xl">
+                        <div className="inline-flex items-center justify-center w-12 h-12 mb-3 text-white bg-gray-600 rounded-full">
+                          <Calendar className="w-6 h-6" />
                         </div>
-                        <p className="text-sm text-gray-600 font-medium mb-1">Application Fee</p>
+                        <p className="mb-1 text-sm font-medium text-gray-600">Application Fee</p>
                         <p className="text-3xl font-bold text-gray-800">${selectedUniversity.application_fee}</p>
-                        <p className="text-sm text-gray-500 mt-1">{selectedUniversity.application_system}</p>
+                        <p className="mt-1 text-sm text-gray-500">{selectedUniversity.application_system}</p>
                       </div>
                     </div>
 
                     {/* Detailed Information Sections */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div className="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-2">
                       {/* Notable Alumni */}
-                      <Card className="border-l-4 border-l-amber-300 shadow-sm">
+                      <Card className="border-l-4 shadow-sm border-l-amber-300">
                         <CardContent className="p-6">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <Star className="h-6 w-6 mr-3 text-amber-500" />
+                          <h4 className="flex items-center mb-4 text-xl font-semibold text-gray-800">
+                            <Star className="w-6 h-6 mr-3 text-amber-500" />
                             Notable Alumni
                           </h4>
                           <div className="flex flex-wrap gap-3">
                             {selectedUniversity.notable_alumni.map((alumni: string) => (
-                              <Badge key={alumni} className="bg-amber-50 border-amber-200 text-amber-800 px-4 py-2 text-sm">
+                              <Badge key={alumni} className="px-4 py-2 text-sm bg-amber-50 border-amber-200 text-amber-800">
                                 {alumni}
                               </Badge>
                             ))}
@@ -689,15 +686,15 @@ export default function AddApplicationPage() {
                       </Card>
 
                       {/* Popular Majors */}
-                      <Card className="border-l-4 border-l-slate-300 shadow-sm">
+                      <Card className="border-l-4 shadow-sm border-l-slate-300">
                         <CardContent className="p-6">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <BookOpen className="h-6 w-6 mr-3 text-slate-500" />
+                          <h4 className="flex items-center mb-4 text-xl font-semibold text-gray-800">
+                            <BookOpen className="w-6 h-6 mr-3 text-slate-500" />
                             Popular Academic Programs
                           </h4>
                           <div className="flex flex-wrap gap-3">
                             {selectedUniversity.popular_majors.map((major: string) => (
-                              <Badge key={major} className="bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors px-4 py-2 text-sm">
+                              <Badge key={major} className="px-4 py-2 text-sm transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200">
                                 {major}
                               </Badge>
                             ))}
@@ -706,15 +703,15 @@ export default function AddApplicationPage() {
                       </Card>
 
                       {/* Key Highlights */}
-                      <Card className="border-l-4 border-l-emerald-300 shadow-sm">
+                      <Card className="border-l-4 shadow-sm border-l-emerald-300">
                         <CardContent className="p-6">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <Award className="h-6 w-6 mr-3 text-emerald-500" />
+                          <h4 className="flex items-center mb-4 text-xl font-semibold text-gray-800">
+                            <Award className="w-6 h-6 mr-3 text-emerald-500" />
                             Key Strengths & Highlights
                           </h4>
                           <div className="flex flex-wrap gap-3">
                             {selectedUniversity.highlights.map((highlight: string) => (
-                              <Badge key={highlight} className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-4 py-2 text-sm">
+                              <Badge key={highlight} className="px-4 py-2 text-sm border bg-emerald-50 text-emerald-800 border-emerald-200">
                                 {highlight}
                               </Badge>
                             ))}
@@ -723,21 +720,21 @@ export default function AddApplicationPage() {
                       </Card>
 
                       {/* Application Deadlines */}
-                      <Card className="border-l-4 border-l-rose-300 shadow-sm">
+                      <Card className="border-l-4 shadow-sm border-l-rose-300">
                         <CardContent className="p-6">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                            <Calendar className="h-6 w-6 mr-3 text-rose-500" />
+                          <h4 className="flex items-center mb-4 text-xl font-semibold text-gray-800">
+                            <Calendar className="w-6 h-6 mr-3 text-rose-500" />
                             Application Deadlines
                           </h4>
                           <div className="space-y-3">
                             {selectedUniversity.deadlines.early_action && (
-                              <div className="p-4 bg-rose-50 border border-rose-200 rounded-lg">
-                                <p className="font-semibold text-rose-800 text-lg">Early Action</p>
+                              <div className="p-4 border rounded-lg bg-rose-50 border-rose-200">
+                                <p className="text-lg font-semibold text-rose-800">Early Action</p>
                                 <p className="text-rose-600">{selectedUniversity.deadlines.early_action}</p>
                               </div>
                             )}
-                            <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
-                              <p className="font-semibold text-slate-800 text-lg">Regular Decision</p>
+                            <div className="p-4 border rounded-lg bg-slate-50 border-slate-200">
+                              <p className="text-lg font-semibold text-slate-800">Regular Decision</p>
                               <p className="text-slate-600">{selectedUniversity.deadlines.regular_decision}</p>
                             </div>
                           </div>
@@ -751,7 +748,7 @@ export default function AddApplicationPage() {
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <GraduationCap className="h-5 w-5 mr-2" />
+                      <GraduationCap className="w-5 h-5 mr-2" />
                       Application Configuration
                     </CardTitle>
                     <CardDescription>
@@ -759,9 +756,9 @@ export default function AddApplicationPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Application Type</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Application Type</label>
                         <Select 
                           value={applicationData.application_type} 
                           onValueChange={(value) => setApplicationData(prev => ({...prev, application_type: value}))}
@@ -782,7 +779,7 @@ export default function AddApplicationPage() {
                         </Select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Priority Level</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-700">Priority Level</label>
                         <Select 
                           value={applicationData.priority?.toString()} 
                           onValueChange={(value) => setApplicationData(prev => ({...prev, priority: parseInt(value)}))}
@@ -805,7 +802,7 @@ export default function AddApplicationPage() {
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <CheckCircle className="h-5 w-5 mr-2" />
+                      <CheckCircle className="w-5 h-5 mr-2" />
                       Application Requirements
                     </CardTitle>
                     <CardDescription>
@@ -813,19 +810,19 @@ export default function AddApplicationPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       {selectedUniversity.requirements.map((req: string, index: number) => (
-                        <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
-                          <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                        <div key={index} className="flex items-center p-3 rounded-lg bg-gray-50">
+                          <CheckCircle className="flex-shrink-0 w-5 h-5 mr-3 text-green-500" />
                           <span className="text-sm text-gray-700">{req}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="p-4 mt-6 border rounded-lg bg-slate-50 border-slate-200">
                       <div className="flex items-start">
                         <Globe className="h-5 w-5 text-slate-600 mr-3 mt-0.5" />
                         <div>
-                          <h4 className="font-semibold text-slate-800 mb-1">Application System</h4>
+                          <h4 className="mb-1 font-semibold text-slate-800">Application System</h4>
                           <p className="text-sm text-slate-700">
                             This university uses <strong>{selectedUniversity.application_system}</strong>. 
                             Make sure you have an account set up before starting your application.
@@ -840,7 +837,7 @@ export default function AddApplicationPage() {
                 <Card className="border-0 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl">
-                      <FileText className="h-6 w-6 mr-3 text-slate-600" />
+                      <FileText className="w-6 h-6 mr-3 text-slate-600" />
                       Configure Your Application
                     </CardTitle>
                     <CardDescription className="text-base">
@@ -849,9 +846,9 @@ export default function AddApplicationPage() {
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleAddApplication} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block mb-2 text-sm font-medium text-gray-700">
                             Preferred Major
                           </label>
                           <Select 
@@ -870,7 +867,7 @@ export default function AddApplicationPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block mb-2 text-sm font-medium text-gray-700">
                             Application Type
                           </label>
                           <Select 
@@ -890,7 +887,7 @@ export default function AddApplicationPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block mb-2 text-sm font-medium text-gray-700">
                             Priority Level
                           </label>
                           <Select 
@@ -909,7 +906,7 @@ export default function AddApplicationPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block mb-2 text-sm font-medium text-gray-700">
                             Expected Graduation Year
                           </label>
                           <Select 
@@ -930,33 +927,33 @@ export default function AddApplicationPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
                           Personal Statement / Why This University?
                         </label>
                         <textarea
                           value={applicationData.personal_statement || ''}
                           onChange={(e) => setApplicationData(prev => ({...prev, personal_statement: e.target.value}))}
                           rows={6}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500 resize-none"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
                           placeholder="Write about why you want to attend this university, your academic interests, and how you would contribute to the campus community..."
                         />
-                        <p className="text-sm text-gray-500 mt-1">This will help you prepare for your actual application essays.</p>
+                        <p className="mt-1 text-sm text-gray-500">This will help you prepare for your actual application essays.</p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block mb-2 text-sm font-medium text-gray-700">
                           Additional Notes & Goals
                         </label>
                         <textarea
                           value={applicationData.notes || ''}
                           onChange={(e) => setApplicationData(prev => ({...prev, notes: e.target.value}))}
                           rows={4}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500 resize-none"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
                           placeholder="Any additional notes, application strategy, or goals for this university..."
                         />
                       </div>
 
-                      <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                      <div className="flex justify-end pt-4 space-x-4 border-t border-gray-200">
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -967,7 +964,7 @@ export default function AddApplicationPage() {
                         </Button>
                         <Button 
                           type="submit" 
-                          className="bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800 px-6 py-2"
+                          className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                         >
                           Add to My Applications
                         </Button>
